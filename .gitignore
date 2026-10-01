@@ -1,0 +1,71 @@
+# === Secrets — NEVER commit these ===
+.env
+*.pem
+*.key
+*.p12
+*.pfx
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# === Virtual environments ===
+.venv/
+venv/
+env/
+ENV/
+
+# === Testing & coverage ===
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# === Type checking & linting ===
+.mypy_cache/
+.ruff_cache/
+
+# === IDE ===
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# === Qdrant local database (auto-generated, large) ===
+data/qdrant/
+
+# === ATT&CK cached data (auto-downloaded on first run) ===
+data/attack/
+
+# === Eval results (generated output, not source) ===
+eval/results/
+
+# === Scratch/debug scripts ===
+scratch/
+
+# === Logs ===
+*.log
+logs/
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+desktop.ini

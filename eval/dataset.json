@@ -1,0 +1,203 @@
+[
+  {
+    "id": "eval-001",
+    "name": "APT29 - SolarWinds Supply Chain",
+    "source": "MITRE ATT&CK Group G0016 (APT29/Cozy Bear)",
+    "input_iocs": [
+      {"type": "domain", "value": "avsvmcloud.com", "context": "SUNBURST C2 domain used in SolarWinds supply chain attack"},
+      {"type": "ipv4", "value": "13.59.205.66", "context": "APT29 C2 infrastructure associated with SUNBURST"},
+      {"type": "sha256", "value": "ce77d116a074dab7a22a0fd4f2c1ab475f16eec42e1ded3c0b0aa8211fe858d6", "context": "SUNBURST backdoor DLL embedded in SolarWinds Orion update"},
+      {"type": "cve", "value": "CVE-2020-10148", "context": "SolarWinds Orion API authentication bypass"}
+    ],
+    "expected_techniques": ["T1195.002", "T1071.001", "T1027", "T1059.001", "T1053.005", "T1057"]
+  },
+  {
+    "id": "eval-002",
+    "name": "APT29 - Credential Phishing",
+    "source": "MITRE ATT&CK Group G0016 (APT29/Cozy Bear)",
+    "input_iocs": [
+      {"type": "domain", "value": "login-microsoftonline.com", "context": "Credential harvesting domain mimicking Microsoft login"},
+      {"type": "url", "value": "https://login-microsoftonline.com/oauth2/authorize", "context": "Phishing URL targeting OAuth tokens"},
+      {"type": "ipv4", "value": "185.220.101.42", "context": "Tor exit node used for C2 communication"}
+    ],
+    "expected_techniques": ["T1566.002", "T1528", "T1090.003", "T1071.001"]
+  },
+  {
+    "id": "eval-003",
+    "name": "APT28 - Fancy Bear Spearphishing",
+    "source": "MITRE ATT&CK Group G0007 (APT28/Fancy Bear)",
+    "input_iocs": [
+      {"type": "domain", "value": "account-login.org", "context": "APT28 credential phishing domain"},
+      {"type": "sha256", "value": "d4be6c9117db9de76e6b425e3a3c82f2db06bd3af145e23e10def87b73bc4adc", "context": "X-Agent/Sofacy implant dropper"},
+      {"type": "ipv4", "value": "191.101.31.6", "context": "APT28 C2 server hosting X-Agent"}
+    ],
+    "expected_techniques": ["T1566.001", "T1059.003", "T1071.001", "T1041", "T1547.001"]
+  },
+  {
+    "id": "eval-004",
+    "name": "APT28 - Exploitation Campaign",
+    "source": "MITRE ATT&CK Group G0007 (APT28/Fancy Bear)",
+    "input_iocs": [
+      {"type": "cve", "value": "CVE-2023-23397", "context": "Microsoft Outlook privilege escalation exploited by APT28"},
+      {"type": "ipv4", "value": "61.14.68.33", "context": "APT28 SMB relay server for NTLM hash capture"},
+      {"type": "domain", "value": "update-service.net", "context": "APT28 payload staging domain"}
+    ],
+    "expected_techniques": ["T1203", "T1187", "T1557.001", "T1003.001"]
+  },
+  {
+    "id": "eval-005",
+    "name": "Lazarus Group - Financial Theft",
+    "source": "MITRE ATT&CK Group G0032 (Lazarus Group)",
+    "input_iocs": [
+      {"type": "domain", "value": "blockchain-update.com", "context": "Lazarus watering hole targeting cryptocurrency exchanges"},
+      {"type": "sha256", "value": "8a2495a7758945c7c9eba8e3b3a7a08f01297d8d96a048801e91bdcfafc05a27", "context": "AppleJeus cryptocurrency trading app trojan"},
+      {"type": "ipv4", "value": "104.168.167.106", "context": "Lazarus Group C2 server"}
+    ],
+    "expected_techniques": ["T1189", "T1204.002", "T1071.001", "T1565.001", "T1036.005"]
+  },
+  {
+    "id": "eval-006",
+    "name": "Lazarus Group - SWIFT Banking",
+    "source": "MITRE ATT&CK Group G0032 (Lazarus Group)",
+    "input_iocs": [
+      {"type": "sha256", "value": "a0e37c577f1a5e5b3e6553a0ea3c18cc25b87ecf6fb4bb9e8dd7df12bb0b2e3e", "context": "SWIFT banking malware used in Bangladesh Bank heist"},
+      {"type": "ipv4", "value": "175.45.176.3", "context": "North Korean IP range associated with Lazarus"},
+      {"type": "domain", "value": "swift-update.com", "context": "Fake SWIFT update domain for payload delivery"}
+    ],
+    "expected_techniques": ["T1565.001", "T1070.004", "T1059.001", "T1071.001", "T1486"]
+  },
+  {
+    "id": "eval-007",
+    "name": "FIN7 - POS Malware Campaign",
+    "source": "MITRE ATT&CK Group G0046 (FIN7)",
+    "input_iocs": [
+      {"type": "domain", "value": "comms.slfrsd.com", "context": "FIN7 Carbanak C2 domain"},
+      {"type": "sha256", "value": "b98e4a1f91e9c3a9a8b5c8ad3a7f2c1b6e0d4f8a2c5b9e7d3f1a6c4b8e2d0f7", "context": "Carbanak backdoor binary"},
+      {"type": "ipv4", "value": "185.180.198.40", "context": "FIN7 C2 infrastructure node"}
+    ],
+    "expected_techniques": ["T1566.001", "T1059.005", "T1059.003", "T1071.001", "T1005"]
+  },
+  {
+    "id": "eval-008",
+    "name": "FIN7 - Supply Chain via IT Management",
+    "source": "MITRE ATT&CK Group G0046 (FIN7)",
+    "input_iocs": [
+      {"type": "domain", "value": "klofrsd.com", "context": "FIN7 phishing domain for fake job offers"},
+      {"type": "sha256", "value": "c3d8e2f7a1b4c6d9e0f2a3b5c7d8e1f0a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7", "context": "GRIFFON backdoor first stage"},
+      {"type": "cve", "value": "CVE-2017-11882", "context": "Microsoft Office Equation Editor exploit used by FIN7"}
+    ],
+    "expected_techniques": ["T1566.001", "T1203", "T1059.005", "T1547.001", "T1041"]
+  },
+  {
+    "id": "eval-009",
+    "name": "Sandworm - Ukraine Power Grid",
+    "source": "MITRE ATT&CK Group G0034 (Sandworm Team)",
+    "input_iocs": [
+      {"type": "sha256", "value": "f3e41eb94c4d72a98cd743bbb02d248f510ad925", "context": "BlackEnergy 3 malware targeting Ukrainian power grid"},
+      {"type": "domain", "value": "update-adobe.com", "context": "Sandworm C2 domain disguised as Adobe update"},
+      {"type": "ipv4", "value": "5.149.254.114", "context": "Sandworm Team C2 infrastructure"}
+    ],
+    "expected_techniques": ["T1566.001", "T1059.001", "T1071.001", "T1562.001", "T1485"]
+  },
+  {
+    "id": "eval-010",
+    "name": "Sandworm - NotPetya Wiper",
+    "source": "MITRE ATT&CK Group G0034 (Sandworm Team)",
+    "input_iocs": [
+      {"type": "sha256", "value": "027cc450ef5f8c5f653329641ec1fed91f694e0d229928963b30f6b0d7d3a745", "context": "NotPetya wiper malware"},
+      {"type": "cve", "value": "CVE-2017-0144", "context": "EternalBlue SMB vulnerability used for lateral movement"},
+      {"type": "ipv4", "value": "84.200.16.5", "context": "NotPetya distribution infrastructure"}
+    ],
+    "expected_techniques": ["T1195.002", "T1210", "T1569.002", "T1486", "T1485"]
+  },
+  {
+    "id": "eval-011",
+    "name": "Turla - Carbon Backdoor",
+    "source": "MITRE ATT&CK Group G0010 (Turla)",
+    "input_iocs": [
+      {"type": "domain", "value": "news-ede.com", "context": "Turla watering hole domain for European targets"},
+      {"type": "sha256", "value": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2", "context": "Carbon backdoor DLL"},
+      {"type": "ipv4", "value": "46.166.162.96", "context": "Turla C2 server for Carbon framework"}
+    ],
+    "expected_techniques": ["T1189", "T1059.001", "T1071.001", "T1027", "T1036.005"]
+  },
+  {
+    "id": "eval-012",
+    "name": "Turla - Satellite C2",
+    "source": "MITRE ATT&CK Group G0010 (Turla)",
+    "input_iocs": [
+      {"type": "domain", "value": "microsoft-update.net", "context": "Turla C2 domain mimicking Microsoft updates"},
+      {"type": "ipv4", "value": "82.146.174.58", "context": "Turla satellite-based C2 relay node"},
+      {"type": "sha256", "value": "b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3", "context": "Kazuar backdoor variant"}
+    ],
+    "expected_techniques": ["T1102", "T1071.001", "T1027", "T1059.001", "T1090"]
+  },
+  {
+    "id": "eval-013",
+    "name": "APT41 - Dual Espionage & Financial",
+    "source": "MITRE ATT&CK Group G0096 (APT41)",
+    "input_iocs": [
+      {"type": "cve", "value": "CVE-2019-3396", "context": "Atlassian Confluence RCE exploited by APT41 for initial access"},
+      {"type": "domain", "value": "github-update.com", "context": "APT41 C2 domain mimicking GitHub"},
+      {"type": "sha256", "value": "d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5", "context": "ShadowPad backdoor module"},
+      {"type": "ipv4", "value": "103.230.15.130", "context": "APT41 operational C2 infrastructure"}
+    ],
+    "expected_techniques": ["T1190", "T1059.001", "T1071.001", "T1005", "T1027"]
+  },
+  {
+    "id": "eval-014",
+    "name": "Kimsuky - Academic Targeting",
+    "source": "MITRE ATT&CK Group G0094 (Kimsuky)",
+    "input_iocs": [
+      {"type": "domain", "value": "naver-login.com", "context": "Kimsuky credential phishing domain targeting South Korean Naver users"},
+      {"type": "url", "value": "https://naver-login.com/verify.php", "context": "Credential harvesting page"},
+      {"type": "sha256", "value": "e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6", "context": "BabyShark reconnaissance malware"}
+    ],
+    "expected_techniques": ["T1566.002", "T1059.005", "T1071.001", "T1056.001", "T1113"]
+  },
+  {
+    "id": "eval-015",
+    "name": "MuddyWater - Middle East Targeting",
+    "source": "MITRE ATT&CK Group G0069 (MuddyWater)",
+    "input_iocs": [
+      {"type": "domain", "value": "win-update.com", "context": "MuddyWater C2 domain disguised as Windows Update"},
+      {"type": "sha256", "value": "f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7", "context": "POWERSTATS macro-based backdoor"},
+      {"type": "ipv4", "value": "94.130.204.20", "context": "MuddyWater C2 server in Middle East campaign"}
+    ],
+    "expected_techniques": ["T1566.001", "T1059.001", "T1204.002", "T1071.001", "T1027"]
+  },
+  {
+    "id": "eval-016",
+    "name": "Hafnium - Exchange Server Exploitation",
+    "source": "MITRE ATT&CK Group G0125 (HAFNIUM)",
+    "input_iocs": [
+      {"type": "cve", "value": "CVE-2021-26855", "context": "Microsoft Exchange Server SSRF vulnerability (ProxyLogon)"},
+      {"type": "cve", "value": "CVE-2021-27065", "context": "Microsoft Exchange post-auth arbitrary file write"},
+      {"type": "sha256", "value": "a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8", "context": "China Chopper webshell deployed post-exploitation"},
+      {"type": "ipv4", "value": "165.232.154.116", "context": "HAFNIUM C2 server for Exchange exploitation"}
+    ],
+    "expected_techniques": ["T1190", "T1505.003", "T1059.001", "T1003.001", "T1560.001"]
+  },
+  {
+    "id": "eval-017",
+    "name": "APT29 - WellMess COVID Research",
+    "source": "MITRE ATT&CK Group G0016 (APT29/Cozy Bear)",
+    "input_iocs": [
+      {"type": "domain", "value": "covid-research.com", "context": "APT29 domain targeting COVID-19 vaccine research organizations"},
+      {"type": "sha256", "value": "b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9", "context": "WellMess malware used in COVID research espionage"},
+      {"type": "cve", "value": "CVE-2019-19781", "context": "Citrix ADC vulnerability exploited for initial access"}
+    ],
+    "expected_techniques": ["T1190", "T1071.001", "T1059.001", "T1005", "T1041"]
+  },
+  {
+    "id": "eval-018",
+    "name": "Scattered Spider - SIM Swapping",
+    "source": "MITRE ATT&CK Group G1015 (Scattered Spider)",
+    "input_iocs": [
+      {"type": "domain", "value": "okta-verify.com", "context": "Credential phishing domain mimicking Okta for MFA bypass"},
+      {"type": "url", "value": "https://okta-verify.com/signin/verify", "context": "MFA phishing page"},
+      {"type": "ipv4", "value": "45.33.32.156", "context": "Scattered Spider operational infrastructure"}
+    ],
+    "expected_techniques": ["T1566.002", "T1111", "T1078", "T1199", "T1213"]
+  }
+]

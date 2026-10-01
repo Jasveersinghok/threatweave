@@ -1,0 +1,32 @@
+[
+  {
+    "type": "domain",
+    "value": "evil-phishing.example.com",
+    "source": "manual",
+    "context": "Phishing domain serving credential harvesting pages targeting corporate email"
+  },
+  {
+    "type": "ipv4",
+    "value": "198.51.100.42",
+    "source": "manual",
+    "context": "C2 server hosting Cobalt Strike beacon observed in APT29 campaign"
+  },
+  {
+    "type": "sha256",
+    "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source": "manual",
+    "context": "Malicious DLL payload side-loaded via legitimate application"
+  },
+  {
+    "type": "cve",
+    "value": "CVE-2024-3400",
+    "source": "manual",
+    "context": "PAN-OS command injection vulnerability exploited for initial access"
+  },
+  {
+    "type": "ipv4",
+    "value": "203.0.113.55",
+    "source": "manual",
+    "context": "Secondary C2 node observed beaconing to port 443 with jitter pattern"
+  }
+]

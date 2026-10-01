@@ -1,0 +1,11 @@
+type,value,source,context
+ipv4,198.51.100.42,manual,Known C2 server for Cobalt Strike beacon
+domain,evil-phishing.example.com,manual,Credential harvesting phishing domain
+sha256,e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,manual,Malicious DLL payload
+cve,CVE-2024-3400,manual,PAN-OS command injection initial access
+ipv4,203.0.113.55,manual,Secondary C2 beaconing on port 443
+domain,malware-cdn.example.net,manual,Payload staging server for second-stage dropper
+url,http://evil-phishing.example.com/login.php,manual,Credential harvesting page URL
+sha256,a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a,manual,Second-stage dropper executable
+ipv4,192.0.2.100,manual,DNS exfiltration endpoint observed in threat intel
+cve,CVE-2023-46805,manual,Ivanti Connect Secure auth bypass used for VPN access
