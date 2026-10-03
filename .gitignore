@@ -9,6 +9,8 @@ testing.py
 
 # Data and Databases
 data/
+!data/attack/
+!data/attack/techniques.json
 
 
 # Python Virtual Environments

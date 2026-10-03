@@ -40,6 +40,15 @@ def sync_from_huggingface() -> None:
             logger.info("Extracting %s", zip_path)
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
                 zip_ref.extractall(data_dir)
+                
+            # If the zip file contained a "data" folder, it extracted to data/data/
+            # Let's move it up.
+            import shutil
+            nested_data = data_dir / "data"
+            if nested_data.exists() and nested_data.is_dir():
+                for item in nested_data.iterdir():
+                    shutil.move(str(item), str(data_dir / item.name))
+                nested_data.rmdir()
             
             # Clean up the zip file
             zip_path.unlink(missing_ok=True)
