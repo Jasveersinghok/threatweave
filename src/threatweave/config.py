@@ -9,8 +9,8 @@ from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# Resolve project root (three levels up from this file: src/threatweave/config.py)
-_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+# Resolve project root (use current working directory, which is safe for Streamlit Cloud and local execution)
+_PROJECT_ROOT = Path.cwd()
 
 
 class Settings(BaseSettings):
