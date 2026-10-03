@@ -1,7 +1,6 @@
 # ThreatWeave - Phase 1 Dependencies
 # Install with: pip install -r requirements.txt
 # === Core ===
-.
 langgraph>=0.2.0
 litellm>=1.0.0
 instructor>=1.0.0
@@ -11,6 +10,7 @@ pydantic-settings>=2.0
 # === Embeddings & Vector Store ===
 sentence-transformers>=2.2.0
 qdrant-client>=1.7.0
+rank_bm25>=0.2.2
 
 # === CTI Libraries ===
 stix2>=3.0.0
@@ -37,3 +37,6 @@ pytest>=7.0
 pytest-asyncio>=0.21
 ruff>=0.1.0
 mypy>=1.7.0
+
+# === Local Package ===
+-e .
