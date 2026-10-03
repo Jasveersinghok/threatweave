@@ -9,7 +9,7 @@
 
 **A multi-agent Cyber Threat Intelligence analysis system that takes raw indicators, maps them to MITRE ATT&CK techniques using Hybrid RAG (RRF + LLM-generated keywords), generates detection logic, adversarially critiques it, validates output with deterministic checks, and exports structured STIX 2.1 intelligence reports.**
 
-> Built with LangGraph, Qdrant, and sentence-transformers. Supports Groq API (free tier) or any local model via vLLM/Ollama.
+> Built with LangGraph, Qdrant, and sentence-transformers. Powered by NVIDIA Nemotron (free tier) for high-throughput 16k context window, or any local model via vLLM/Ollama.
 
 ---
 
@@ -42,7 +42,7 @@ pip install -r requirements.txt
 
 # 2. Set up environment
 cp .env.example .env
-# Edit .env — add your GROQ_API_KEY (free at console.groq.com)
+# Edit .env — add your NVIDIA_API_KEY (free at build.nvidia.com)
 # OR point to a local model (see Model Options below)
 
 # 3. Ingest ATT&CK knowledge base (one-time, ~2 minutes)
@@ -153,7 +153,7 @@ flowchart TD
     CB --> AN
 
     AN -->|"LLM-expanded keywords → Hybrid RRF retrieval"| QD & BM25
-    QD & BM25 -->|"RRF-fused top-50 candidates"| AN
+    QD & BM25 -->|"RRF-fused top-10 candidates"| AN
     AN -->|Summary + ATT&CK mappings| HU
     HU -->|Sigma rules| RE
     RE -->|Critique + hardening| VA
@@ -208,7 +208,7 @@ Each case triggers one LangGraph run with 5 agents. The graph is checkpointed so
 - System prompt grounds the agent as a CTI analyst with specific analytical methodology
 - Provides enrichment data as structured context, clearly separated from instructions
 - Requires evidence citations for every technique mapping — no mapping without evidence
-- Uses **Hybrid RRF retrieval** with LLM-generated keywords to fetch top-50 ATT&CK candidates
+- Uses **Hybrid RRF retrieval** with LLM-generated keywords to fetch top-10 ATT&CK candidates
 - Instructs the model to choose ONLY from retrieved candidates (prevents hallucinated technique IDs)
 
 ### Agent 2: 🎯 Hunter
@@ -748,7 +748,7 @@ Results are saved to `eval/results/eval_YYYYMMDD_HHMMSS.json` with full per-case
 
 ### Prerequisites
 - Python 3.11+
-- An LLM backend: Groq API key (free), or a local model via vLLM/Ollama
+- An LLM backend: NVIDIA API key (free), or a local model via vLLM/Ollama
 - Optional API keys: NVD (CVE enrichment), OTX (threat feeds), MaxMind (GeoIP)
 
 ### Steps
@@ -764,9 +764,9 @@ pip install -e ".[dev]"
 # Configure
 cp .env.example .env
 # Edit .env — see Model Options section for LLM configuration
-# For Groq:
-#   GROQ_API_KEY=gsk_...
-#   LLM_MODEL=groq/openai/gpt-oss-120b
+# For NVIDIA:
+#   NVIDIA_API_KEY=nvapi-...
+#   LLM_MODEL=nvidia/nemotron-3.5-lightning-30b-a3b
 # For local vLLM:
 #   OPENAI_API_BASE=http://localhost:8080/v1
 #   LLM_MODEL=openai/your-model-name
@@ -782,10 +782,10 @@ streamlit run src/threatweave/app.py
 
 | Variable | Required | Description |
 |---|---|---|
-| `GROQ_API_KEY` | For Groq | Groq API key (free at console.groq.com) |
+| `NVIDIA_API_KEY` | For NVIDIA | NVIDIA API key (free at build.nvidia.com) |
 | `OPENAI_API_BASE` | For local model | Base URL of vLLM/Ollama server (e.g. `http://localhost:8080/v1`) |
 | `OPENAI_API_KEY` | For local model | Any string (local servers don't validate) |
-| `LLM_MODEL` | Yes | Model name with provider prefix (e.g. `groq/openai/gpt-oss-120b` or `openai/Qwen/Qwen2.5-7B`) |
+| `LLM_MODEL` | Yes | Model name with provider prefix (e.g. `nvidia/nemotron-3.5-lightning-30b-a3b`) |
 | `NVD_API_KEY` | No | NVD API key for higher rate limits (free) |
 | `OTX_API_KEY` | No | AlienVault OTX API key (free) |
 | `MAXMIND_LICENSE_KEY` | No | MaxMind GeoLite2 license key (free with registration) |
@@ -846,6 +846,8 @@ for case in cases:
 | **No Redis/Kafka** | Single-process project. Direct function calls are simpler, faster to build, and easier to debug. |
 | **No Neo4j** | At hundreds of indicators, dictionary-based grouping handles case formation. Graph DBs pay off at millions of nodes. |
 | **Deterministic STIX IDs** | UUIDv5-based IDs mean re-running the system on the same case produces identical objects. No duplicates in downstream consumers. |
+| **Dynamic JSON Schemas** | Smaller distilled models (like Nemotron 30B) often truncate secondary fields (e.g., `rationale`) when generating large complex strings like YAML. We made secondary Pydantic fields optional with fallback defaults to prevent strict validation from crashing the pipeline. |
+| **HuggingFace Embedding Sync** | Pushing binary `.sqlite` Qdrant vector databases to GitHub is a bad practice. The UI natively downloads and extracts the pre-embedded vectors from HuggingFace Datasets on boot if missing. |
 | **Prompts as markdown files** | Prompts are version-controlled, diffable, and editable without changing Python code. |
 | **Iteration cap of 2 retries** | Prevents infinite Validator→Hunter loops. After 3 total attempts, emit with warnings. |
 
@@ -902,10 +904,10 @@ for case in cases:
 - [x] Enrichment resilience: 60s timeout, 2 retries, sequential concurrency
 - [x] Evaluation dataset (10 labeled cases), automated metrics runner
 
-### Phase 5 — Deployment ⬜
-- [ ] Deploy to Streamlit Cloud or HuggingFace Spaces
-- [ ] GitHub cleanup: `.gitignore`, secrets audit, release tag
-- [ ] Demo video (3 minutes)
+### Phase 5 — Deployment ✅
+- [x] Deploy to Streamlit Cloud or HuggingFace Spaces
+- [x] GitHub cleanup: `.gitignore`, secrets audit, release tag
+- [x] Setup HuggingFace Dataset auto-sync for embeddings
 
 ---
 
