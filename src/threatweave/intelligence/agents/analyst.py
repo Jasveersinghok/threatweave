@@ -56,8 +56,7 @@ def _build_technique_context(techniques: list[dict[str, Any]]) -> str:
     for i, t in enumerate(techniques, 1):
         lines.append(f"### Candidate {i}: {t['technique_id']} — {t['name']}")
         lines.append(f"- Tactics: {', '.join(t.get('tactics', []))}")
-        lines.append(f"- Platforms: {', '.join(t.get('platforms', []))}")
-        desc = t.get("description", "")[:300]
+        desc = t.get("description", "")[:150]
         if desc:
             lines.append(f"- Description: {desc}...")
         lines.append("")
@@ -216,7 +215,7 @@ def run_analyst(case: Case) -> AnalystOutput:
         query=expanded_query,
         bm25_queries=bm25_queries,
         techniques_file=str(settings.attack_techniques_file),
-        top_k=50,
+        top_k=10,
     )
     logger.info("Retrieved %d technique candidates (hybrid)", len(techniques))
 
@@ -228,7 +227,7 @@ def run_analyst(case: Case) -> AnalystOutput:
 
     # Call LLM via instructor for structured output
     logger.info("Calling LLM for Analyst agent (model: %s)", settings.llm_model)
-    client = instructor.from_litellm(litellm.completion, mode=instructor.Mode.JSON)
+    client = instructor.from_litellm(litellm.completion, mode=instructor.Mode.MD_JSON)
 
     try:
         result = client.chat.completions.create(
@@ -240,7 +239,8 @@ def run_analyst(case: Case) -> AnalystOutput:
             ],
             max_retries=2,
             temperature=0.2,
-
+            max_tokens=3000,
+            extra_body={"chat_template_kwargs": {"enable_thinking": False}},
         )
     except Exception:
         logger.exception("Analyst agent LLM call failed")

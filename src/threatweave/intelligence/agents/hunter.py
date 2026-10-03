@@ -91,7 +91,7 @@ def run_hunter(
     user_message = _build_context(case, analyst_output, validator_feedback)
 
     logger.info("Calling LLM for Hunter agent (model: %s)", settings.llm_model)
-    client = instructor.from_litellm(litellm.completion, mode=instructor.Mode.JSON)
+    client = instructor.from_litellm(litellm.completion, mode=instructor.Mode.MD_JSON)
 
     try:
         result = client.chat.completions.create(
@@ -103,7 +103,8 @@ def run_hunter(
             ],
             max_retries=2,
             temperature=0.3,
-
+            max_tokens=3000,
+            extra_body={"chat_template_kwargs": {"enable_thinking": False}},
         )
     except Exception:
         logger.exception("Hunter agent LLM call failed")

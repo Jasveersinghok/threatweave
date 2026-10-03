@@ -1,0 +1,29 @@
+{
+  "summary": {
+    "run_timestamp": "2026-09-29T04:36:55.361250+00:00",
+    "total_cases": 1,
+    "successful_cases": 0,
+    "failed_cases": 1,
+    "avg_strict_precision": 0.0,
+    "avg_strict_recall": 0.0,
+    "avg_strict_f1": 0.0,
+    "avg_tactic_precision": 0.0,
+    "avg_tactic_recall": 0.0,
+    "avg_retrieval_recall_10": 0.0,
+    "avg_sigma_validity": 0.0,
+    "avg_hallucination": 0.0,
+    "avg_latency_seconds": 0.0
+  },
+  "cases": [
+    {
+      "case_id": "eval-003",
+      "name": "APT28 - Fancy Bear Spearphishing",
+      "status": "error",
+      "error": "No report generated",
+      "errors": [
+        "Reporter error: litellm.InternalServerError: InternalServerError: OpenAIException - Internal Server Error"
+      ],
+      "elapsed_seconds": 788.46
+    }
+  ]
+}

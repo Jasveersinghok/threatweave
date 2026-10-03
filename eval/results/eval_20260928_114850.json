@@ -1,0 +1,80 @@
+{
+  "summary": {
+    "run_timestamp": "2026-09-28T11:48:50.234489+00:00",
+    "total_cases": 1,
+    "successful_cases": 1,
+    "failed_cases": 0,
+    "avg_strict_precision": 0.0,
+    "avg_strict_recall": 0.0,
+    "avg_strict_f1": 0.0,
+    "avg_tactic_precision": 1.0,
+    "avg_tactic_recall": 0.1429,
+    "avg_retrieval_recall_10": 0.1667,
+    "avg_sigma_validity": 1.0,
+    "avg_hallucination": 0.0,
+    "avg_latency_seconds": 373.59
+  },
+  "cases": [
+    {
+      "case_id": "eval-001",
+      "name": "APT29 - SolarWinds Supply Chain",
+      "source": "MITRE ATT&CK Group G0016 (APT29/Cozy Bear)",
+      "status": "success",
+      "elapsed_seconds": 373.59,
+      "indicators_count": 4,
+      "expected_techniques": [
+        "T1027",
+        "T1053.005",
+        "T1057",
+        "T1059.001",
+        "T1071.001",
+        "T1195.002"
+      ],
+      "predicted_techniques": [
+        "T1027.003",
+        "T1027.009",
+        "T1027.010"
+      ],
+      "correct_techniques": [],
+      "missed_techniques": [
+        "T1027",
+        "T1053.005",
+        "T1057",
+        "T1059.001",
+        "T1071.001",
+        "T1195.002"
+      ],
+      "extra_techniques": [
+        "T1027.003",
+        "T1027.009",
+        "T1027.010"
+      ],
+      "strict_precision": 0.0,
+      "strict_recall": 0.0,
+      "strict_f1": 0.0,
+      "tactic_precision": 1.0,
+      "tactic_recall": 0.1429,
+      "tactic_f1": 0.25,
+      "retrieval_recall_10": 0.1667,
+      "retrieved_ids": [
+        "T1001.002",
+        "T1027",
+        "T1027.007",
+        "T1027.008",
+        "T1027.013",
+        "T1027.014",
+        "T1027.018",
+        "T1132",
+        "T1132.001",
+        "T1132.002"
+      ],
+      "sigma_rules_total": 3,
+      "sigma_rules_valid": 3,
+      "sigma_validity_rate": 1.0,
+      "hallucination_rate": 0.0,
+      "hallucinated_ids": [],
+      "validation_status": "pass",
+      "pipeline_errors": []
+    }
+  ]
+}

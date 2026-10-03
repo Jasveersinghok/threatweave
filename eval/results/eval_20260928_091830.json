@@ -1,0 +1,194 @@
+{
+  "summary": {
+    "run_timestamp": "2026-09-28T09:18:30.409214+00:00",
+    "total_cases": 3,
+    "successful_cases": 3,
+    "failed_cases": 0,
+    "avg_strict_precision": 0.1667,
+    "avg_strict_recall": 0.0556,
+    "avg_strict_f1": 0.0833,
+    "avg_tactic_precision": 0.4444,
+    "avg_tactic_recall": 0.1032,
+    "avg_retrieval_recall_10": 0.0556,
+    "avg_sigma_validity": 1.0,
+    "avg_hallucination": 0.0,
+    "avg_latency_seconds": 268.59
+  },
+  "cases": [
+    {
+      "case_id": "eval-001",
+      "name": "APT29 - SolarWinds Supply Chain",
+      "source": "MITRE ATT&CK Group G0016 (APT29/Cozy Bear)",
+      "status": "success",
+      "elapsed_seconds": 242.69,
+      "indicators_count": 4,
+      "expected_techniques": [
+        "T1027",
+        "T1053.005",
+        "T1057",
+        "T1059.001",
+        "T1071.001",
+        "T1195.002"
+      ],
+      "predicted_techniques": [
+        "T1195",
+        "T1195.002"
+      ],
+      "correct_techniques": [
+        "T1195.002"
+      ],
+      "missed_techniques": [
+        "T1027",
+        "T1053.005",
+        "T1057",
+        "T1059.001",
+        "T1071.001"
+      ],
+      "extra_techniques": [
+        "T1195"
+      ],
+      "strict_precision": 0.5,
+      "strict_recall": 0.1667,
+      "strict_f1": 0.25,
+      "tactic_precision": 1.0,
+      "tactic_recall": 0.1429,
+      "tactic_f1": 0.25,
+      "retrieval_recall_10": 0.1667,
+      "retrieved_ids": [
+        "T1195",
+        "T1195.002",
+        "T1195.003",
+        "T1567.001",
+        "T1583.003",
+        "T1584",
+        "T1584.003",
+        "T1587.001",
+        "T1588.001",
+        "T1659"
+      ],
+      "sigma_rules_total": 2,
+      "sigma_rules_valid": 2,
+      "sigma_validity_rate": 1.0,
+      "hallucination_rate": 0.0,
+      "hallucinated_ids": [],
+      "validation_status": "pass",
+      "pipeline_errors": []
+    },
+    {
+      "case_id": "eval-002",
+      "name": "APT29 - Credential Phishing",
+      "source": "MITRE ATT&CK Group G0016 (APT29/Cozy Bear)",
+      "status": "success",
+      "elapsed_seconds": 286.7,
+      "indicators_count": 3,
+      "expected_techniques": [
+        "T1071.001",
+        "T1090.003",
+        "T1528",
+        "T1566.002"
+      ],
+      "predicted_techniques": [
+        "T1586",
+        "T1598",
+        "T1598.003"
+      ],
+      "correct_techniques": [],
+      "missed_techniques": [
+        "T1071.001",
+        "T1090.003",
+        "T1528",
+        "T1566.002"
+      ],
+      "extra_techniques": [
+        "T1586",
+        "T1598",
+        "T1598.003"
+      ],
+      "strict_precision": 0.0,
+      "strict_recall": 0.0,
+      "strict_f1": 0.0,
+      "tactic_precision": 0.0,
+      "tactic_recall": 0.0,
+      "tactic_f1": 0.0,
+      "retrieval_recall_10": 0.0,
+      "retrieved_ids": [
+        "T1534",
+        "T1566.004",
+        "T1586",
+        "T1586.001",
+        "T1589.001",
+        "T1598",
+        "T1598.001",
+        "T1598.003",
+        "T1598.004",
+        "T1684.001"
+      ],
+      "sigma_rules_total": 3,
+      "sigma_rules_valid": 3,
+      "sigma_validity_rate": 1.0,
+      "hallucination_rate": 0.0,
+      "hallucinated_ids": [],
+      "validation_status": "pass",
+      "pipeline_errors": []
+    },
+    {
+      "case_id": "eval-003",
+      "name": "APT28 - Fancy Bear Spearphishing",
+      "source": "MITRE ATT&CK Group G0007 (APT28/Fancy Bear)",
+      "status": "success",
+      "elapsed_seconds": 276.37,
+      "indicators_count": 3,
+      "expected_techniques": [
+        "T1041",
+        "T1059.003",
+        "T1071.001",
+        "T1547.001",
+        "T1566.001"
+      ],
+      "predicted_techniques": [
+        "T1566.002",
+        "T1583.001",
+        "T1598.003"
+      ],
+      "correct_techniques": [],
+      "missed_techniques": [
+        "T1041",
+        "T1059.003",
+        "T1071.001",
+        "T1547.001",
+        "T1566.001"
+      ],
+      "extra_techniques": [
+        "T1566.002",
+        "T1583.001",
+        "T1598.003"
+      ],
+      "strict_precision": 0.0,
+      "strict_recall": 0.0,
+      "strict_f1": 0.0,
+      "tactic_precision": 0.3333,
+      "tactic_recall": 0.1667,
+      "tactic_f1": 0.2222,
+      "retrieval_recall_10": 0.0,
+      "retrieved_ids": [
+        "T1534",
+        "T1566.002",
+        "T1566.004",
+        "T1584",
+        "T1589.001",
+        "T1598",
+        "T1598.001",
+        "T1598.003",
+        "T1598.004",
+        "T1608.005"
+      ],
+      "sigma_rules_total": 3,
+      "sigma_rules_valid": 3,
+      "sigma_validity_rate": 1.0,
+      "hallucination_rate": 0.0,
+      "hallucinated_ids": [],
+      "validation_status": "pass",
+      "pipeline_errors": []
+    }
+  ]
+}

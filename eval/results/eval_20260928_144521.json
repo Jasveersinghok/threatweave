@@ -1,0 +1,33 @@
+{
+  "summary": {
+    "run_timestamp": "2026-09-28T14:45:21.630828+00:00",
+    "total_cases": 1,
+    "successful_cases": 0,
+    "failed_cases": 1,
+    "avg_strict_precision": 0.0,
+    "avg_strict_recall": 0.0,
+    "avg_strict_f1": 0.0,
+    "avg_tactic_precision": 0.0,
+    "avg_tactic_recall": 0.0,
+    "avg_retrieval_recall_10": 0.0,
+    "avg_sigma_validity": 0.0,
+    "avg_hallucination": 0.0,
+    "avg_latency_seconds": 0.0
+  },
+  "cases": [
+    {
+      "case_id": "eval-001",
+      "name": "APT29 - SolarWinds Supply Chain",
+      "status": "error",
+      "error": "No report generated",
+      "errors": [
+        "Analyst error: litellm.NotFoundError: NotFoundError: OpenAIException - The endpoint unfold-vehicular-important.ngrok-free.dev is offline.\r\n\r\nERR_NGROK_3200",
+        "Hunter: no analyst output",
+        "Red: no hunter output",
+        "Validator: missing agent outputs",
+        "Reporter: missing agent outputs"
+      ],
+      "elapsed_seconds": 89.68
+    }
+  ]
+}

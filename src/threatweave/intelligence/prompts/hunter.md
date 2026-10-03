@@ -60,5 +60,5 @@ If you receive validator feedback (correction block), you MUST:
 ## Output Schema
 
 You MUST output valid JSON matching the HunterOutput schema exactly:
-- `sigma_rules`: Array of objects, each with `technique_id`, `rule_title`, `rule_yaml`, `rationale`, `data_source`
+- `sigma_rules`: Array of objects, each with `technique_id`, `rule_title`, `rule_yaml`, `rationale`, `data_source`. **CRITICAL: THIS ARRAY MUST NOT BE EMPTY! YOU MUST WRITE AT LEAST ONE SIGMA RULE!** Make sure to escape newlines as `\n` in the `rule_yaml` string!
 - `hunt_hypotheses`: Array of objects, each with `hypothesis`, `data_source`, `query_logic`

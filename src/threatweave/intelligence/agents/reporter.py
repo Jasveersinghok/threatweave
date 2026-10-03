@@ -150,7 +150,7 @@ def run_reporter(
     report_id = _generate_report_id(case.case_id)
 
     logger.info("Calling LLM for Reporter agent (model: %s)", settings.llm_model)
-    client = instructor.from_litellm(litellm.completion, mode=instructor.Mode.JSON)
+    client = instructor.from_litellm(litellm.completion, mode=instructor.Mode.MD_JSON)
 
     try:
         result = client.chat.completions.create(
@@ -162,7 +162,8 @@ def run_reporter(
             ],
             max_retries=2,
             temperature=0.2,
-
+            max_tokens=3000,
+            extra_body={"chat_template_kwargs": {"enable_thinking": False}},
         )
     except Exception:
         logger.exception("Reporter agent LLM call failed")

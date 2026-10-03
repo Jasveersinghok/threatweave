@@ -1,0 +1,97 @@
+{
+  "summary": {
+    "run_timestamp": "2026-09-29T06:57:46.086967+00:00",
+    "total_cases": 1,
+    "successful_cases": 1,
+    "failed_cases": 0,
+    "avg_strict_precision": 0.0,
+    "avg_strict_recall": 0.0,
+    "avg_strict_f1": 0.0,
+    "avg_tactic_precision": 0.3333,
+    "avg_tactic_recall": 0.1667,
+    "avg_retrieval_recall_10": 0.0,
+    "avg_sigma_validity": 1.0,
+    "avg_hallucination": 0.0,
+    "avg_latency_seconds": 454.5
+  },
+  "cases": [
+    {
+      "case_id": "eval-003",
+      "name": "APT28 - Fancy Bear Spearphishing",
+      "source": "MITRE ATT&CK Group G0007 (APT28/Fancy Bear)",
+      "status": "success",
+      "elapsed_seconds": 454.5,
+      "indicators_count": 3,
+      "expected_techniques": [
+        "T1041",
+        "T1059.003",
+        "T1071.001",
+        "T1547.001",
+        "T1566.001"
+      ],
+      "predicted_techniques": [
+        "T1566",
+        "T1566.002",
+        "T1583.001",
+        "T1586.002",
+        "T1598.003"
+      ],
+      "correct_techniques": [],
+      "missed_techniques": [
+        "T1041",
+        "T1059.003",
+        "T1071.001",
+        "T1547.001",
+        "T1566.001"
+      ],
+      "extra_techniques": [
+        "T1566",
+        "T1566.002",
+        "T1583.001",
+        "T1586.002",
+        "T1598.003"
+      ],
+      "strict_precision": 0.0,
+      "strict_recall": 0.0,
+      "strict_f1": 0.0,
+      "tactic_precision": 0.3333,
+      "tactic_recall": 0.1667,
+      "tactic_f1": 0.2222,
+      "retrieval_recall_10": 0.0,
+      "retrieved_ids": [
+        "T1029",
+        "T1053.005",
+        "T1056.002",
+        "T1176.001",
+        "T1185",
+        "T1203",
+        "T1204.001",
+        "T1534",
+        "T1560.003",
+        "T1566",
+        "T1566.004",
+        "T1567.001",
+        "T1583.001",
+        "T1586",
+        "T1586.001",
+        "T1586.002",
+        "T1586.003",
+        "T1589.001",
+        "T1590.001",
+        "T1598",
+        "T1598.001",
+        "T1598.003",
+        "T1598.004",
+        "T1608.005",
+        "T1683.001"
+      ],
+      "sigma_rules_total": 5,
+      "sigma_rules_valid": 5,
+      "sigma_validity_rate": 1.0,
+      "hallucination_rate": 0.0,
+      "hallucinated_ids": [],
+      "validation_status": "pass",
+      "pipeline_errors": []
+    }
+  ]
+}

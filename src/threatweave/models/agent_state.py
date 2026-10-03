@@ -56,16 +56,16 @@ class SigmaRule(BaseModel):
     technique_id: str
     rule_title: str
     rule_yaml: str = Field(description="Complete Sigma rule in YAML format")
-    rationale: str
-    data_source: str
+    rationale: str = Field(default="Detection rationale inferred by AI")
+    data_source: str = Field(default="Various log sources")
 
 
 class HuntHypothesis(BaseModel):
     """A threat hunting hypothesis."""
 
-    hypothesis: str
-    data_source: str
-    query_logic: str
+    hypothesis: str = Field(default="Generated hunt hypothesis")
+    data_source: str = Field(default="Various log sources")
+    query_logic: str = Field(default="Review logs for anomalies")
 
 
 class HunterOutput(BaseModel):
@@ -82,10 +82,10 @@ class HunterOutput(BaseModel):
 class EvasionAnalysis(BaseModel):
     """Analysis of how an attacker could evade a specific detection rule."""
 
-    target_rule: str
-    evasion_technique: str
-    difficulty: Literal["trivial", "moderate", "difficult"]
-    suggested_hardening: str
+    target_rule: str = Field(default="Unknown Rule")
+    evasion_technique: str = Field(default="Evasion by obfuscation")
+    difficulty: str = Field(default="moderate")
+    suggested_hardening: str = Field(default="Improve detection logic")
 
 
 class RedOutput(BaseModel):

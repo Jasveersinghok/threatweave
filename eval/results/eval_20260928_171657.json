@@ -1,0 +1,104 @@
+{
+  "summary": {
+    "run_timestamp": "2026-09-28T17:16:57.113048+00:00",
+    "total_cases": 1,
+    "successful_cases": 1,
+    "failed_cases": 0,
+    "avg_strict_precision": 0.6667,
+    "avg_strict_recall": 0.3333,
+    "avg_strict_f1": 0.4444,
+    "avg_tactic_precision": 1.0,
+    "avg_tactic_recall": 0.2857,
+    "avg_retrieval_recall_10": 0.5,
+    "avg_sigma_validity": 1.0,
+    "avg_hallucination": 0.0,
+    "avg_latency_seconds": 579.87
+  },
+  "cases": [
+    {
+      "case_id": "eval-001",
+      "name": "APT29 - SolarWinds Supply Chain",
+      "source": "MITRE ATT&CK Group G0016 (APT29/Cozy Bear)",
+      "status": "success",
+      "elapsed_seconds": 579.87,
+      "indicators_count": 4,
+      "expected_techniques": [
+        "T1027",
+        "T1053.005",
+        "T1057",
+        "T1059.001",
+        "T1071.001",
+        "T1195.002"
+      ],
+      "predicted_techniques": [
+        "T1071.001",
+        "T1102.003",
+        "T1195.002"
+      ],
+      "correct_techniques": [
+        "T1071.001",
+        "T1195.002"
+      ],
+      "missed_techniques": [
+        "T1027",
+        "T1053.005",
+        "T1057",
+        "T1059.001"
+      ],
+      "extra_techniques": [
+        "T1102.003"
+      ],
+      "strict_precision": 0.6667,
+      "strict_recall": 0.3333,
+      "strict_f1": 0.4444,
+      "tactic_precision": 1.0,
+      "tactic_recall": 0.2857,
+      "tactic_f1": 0.4444,
+      "retrieval_recall_10": 0.5,
+      "retrieved_ids": [
+        "T1008",
+        "T1016.001",
+        "T1033",
+        "T1057",
+        "T1059.001",
+        "T1059.009",
+        "T1083",
+        "T1102.002",
+        "T1102.003",
+        "T1104",
+        "T1119",
+        "T1195",
+        "T1195.001",
+        "T1195.002",
+        "T1195.003",
+        "T1216.002",
+        "T1219",
+        "T1219.002",
+        "T1496.001",
+        "T1499.002",
+        "T1505.004",
+        "T1546.013",
+        "T1548.006",
+        "T1552.008",
+        "T1563",
+        "T1563.001",
+        "T1563.002",
+        "T1564.003",
+        "T1564.011",
+        "T1619",
+        "T1622",
+        "T1650",
+        "T1659",
+        "T1673",
+        "T1677"
+      ],
+      "sigma_rules_total": 3,
+      "sigma_rules_valid": 3,
+      "sigma_validity_rate": 1.0,
+      "hallucination_rate": 0.0,
+      "hallucinated_ids": [],
+      "validation_status": "pass",
+      "pipeline_errors": []
+    }
+  ]
+}

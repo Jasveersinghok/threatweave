@@ -67,7 +67,7 @@ def run_red(hunter_output: HunterOutput) -> RedOutput:
     user_message = _build_context(hunter_output)
 
     logger.info("Calling LLM for Red Team agent (model: %s)", settings.llm_model)
-    client = instructor.from_litellm(litellm.completion, mode=instructor.Mode.JSON)
+    client = instructor.from_litellm(litellm.completion, mode=instructor.Mode.MD_JSON)
 
     try:
         result = client.chat.completions.create(
@@ -79,7 +79,8 @@ def run_red(hunter_output: HunterOutput) -> RedOutput:
             ],
             max_retries=2,
             temperature=0.4,
-
+            max_tokens=2000,
+            extra_body={"chat_template_kwargs": {"enable_thinking": False}},
         )
     except Exception:
         logger.exception("Red Team agent LLM call failed")

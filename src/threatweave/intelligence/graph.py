@@ -12,6 +12,7 @@ Graph: Analyst → Hunter → Red → Validator → (conditional)
 from __future__ import annotations
 
 import logging
+import os
 import time
 from datetime import UTC, datetime
 from typing import Any
@@ -40,10 +41,24 @@ _RATE_LIMIT_DELAY = 20
 # Node functions — each takes AgentState, returns partial state update
 # ---------------------------------------------------------------------------
 
+def slow_down_and_rotate_keys() -> None:
+    """Rotate keys if multiple are provided."""
+    
+    keys_str = os.environ.get("GROQ_API_KEYS", "")
+    if keys_str:
+        keys = [k.strip() for k in keys_str.split(",") if k.strip()]
+        if keys:
+            current_key = keys.pop(0)
+            keys.append(current_key)
+            os.environ["GROQ_API_KEYS"] = ",".join(keys)
+            os.environ["GROQ_API_KEY"] = current_key
+            logger.info("Rotated GROQ_API_KEY for next agent call")
+
 
 def analyst_node(state: AgentState) -> dict[str, Any]:
     """Run the Analyst agent."""
     logger.info("=== ANALYST NODE ===")
+    slow_down_and_rotate_keys()
     try:
         result = run_analyst(state["case"])
         return {"analyst_output": result}
@@ -55,6 +70,7 @@ def analyst_node(state: AgentState) -> dict[str, Any]:
 def hunter_node(state: AgentState) -> dict[str, Any]:
     """Run the Hunter agent, with optional validator feedback."""
     logger.info("=== HUNTER NODE (iteration %d) ===", state.get("iteration", 0))
+    slow_down_and_rotate_keys()
     analyst_output = state.get("analyst_output")
     if analyst_output is None:
         return {"errors": [*state.get("errors", []), "Hunter: no analyst output"]}
@@ -77,6 +93,7 @@ def hunter_node(state: AgentState) -> dict[str, Any]:
 def red_node(state: AgentState) -> dict[str, Any]:
     """Run the Red Team agent."""
     logger.info("=== RED TEAM NODE ===")
+    slow_down_and_rotate_keys()
     hunter_output = state.get("hunter_output")
     if hunter_output is None:
         return {"errors": [*state.get("errors", []), "Red: no hunter output"]}
@@ -120,6 +137,7 @@ def validator_node(state: AgentState) -> dict[str, Any]:
 def reporter_node(state: AgentState) -> dict[str, Any]:
     """Run the Reporter agent."""
     logger.info("=== REPORTER NODE ===")
+    slow_down_and_rotate_keys()
     analyst_output = state.get("analyst_output")
     hunter_output = state.get("hunter_output")
     red_output = state.get("red_output")
