@@ -1,7 +1,6 @@
 # ThreatWeave
 
 ![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)
 ![Ruff](https://img.shields.io/badge/code%20style-ruff-purple.svg)
 ![STIX](https://img.shields.io/badge/STIX-2.1-orange.svg)
