@@ -8,7 +8,7 @@ scratch/
 testing.py
 
 # Data and Databases
-data/
+data/*
 !data/attack/
 !data/attack/techniques.json
 
