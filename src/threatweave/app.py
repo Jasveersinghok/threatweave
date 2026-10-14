@@ -545,14 +545,31 @@ elif st.session_state.page == "processing":
         unsafe_allow_html=True,
     )
 
-    with st.spinner("Running pipeline — please do not close this tab..."):
-        run_pipeline(
-            st.session_state.indicators_data_to_run,
-            skip_enrichment=st.session_state.skip_enrich_to_run,
-        )
+    try:
+        with st.spinner("Running pipeline — please do not close this tab..."):
+            run_pipeline(
+                st.session_state.indicators_data_to_run,
+                skip_enrichment=st.session_state.skip_enrich_to_run,
+            )
+    except Exception as exc:
+        st.error(f"❌ Pipeline crashed: {exc}")
+        st.exception(exc)
+        if st.button("⬅️ Start Over", use_container_width=True):
+            st.session_state.page = "input"
+            st.session_state.analysis_result = None
+            st.rerun()
+        st.stop()
 
-    st.session_state.page = "report"
-    st.rerun()
+    # Only go to report if we actually have a result
+    if st.session_state.get("analysis_result") is not None:
+        st.session_state.page = "report"
+        st.rerun()
+    else:
+        st.error("❌ Pipeline completed but produced no result. Check the logs above.")
+        if st.button("⬅️ Start Over", key="no_result_back", use_container_width=True):
+            st.session_state.page = "input"
+            st.rerun()
+
 
 elif st.session_state.page == "report":
     if st.button("⬅️ Start New Analysis", use_container_width=True):
