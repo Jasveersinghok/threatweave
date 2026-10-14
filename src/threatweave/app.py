@@ -222,6 +222,8 @@ def run_pipeline(
     skip_enrichment: bool = True,
 ) -> None:
     """Execute the full ThreatWeave pipeline with progress display."""
+    import threading
+
     from threatweave.cases.builder import build_cases
     from threatweave.collection.normalize import normalize
     from threatweave.enrichment.pipeline import enrich_indicators
@@ -233,36 +235,13 @@ def run_pipeline(
 
     start_time = time.time()
 
-    # ── Progress bar + step label ─────────────────────────────────────────
-    progress_bar = st.progress(0, text="Starting pipeline...")
-
-    STEPS = [
-        (5,  "📥 Normalizing indicators..."),
-        (15, "🔍 Enriching with OSINT APIs..."),
-        (25, "📦 Building investigation cases..."),
-        (40, "🧠 Analyst — mapping ATT&CK techniques via Hybrid RAG..."),
-        (58, "🎯 Hunter — generating Sigma detection rules..."),
-        (72, "⚔️ Red Team — adversarial critique of detections..."),
-        (85, "✅ Validator — deterministic quality checks..."),
-        (95, "📄 Reporter — compiling final intelligence report..."),
-        (100, "✅ Analysis complete!"),
-    ]
-
-    def _progress(step_idx: int) -> None:
-        pct, label = STEPS[step_idx]
-        progress_bar.progress(pct, text=label)
-
-    log_box = st.empty()   # live log lines
-    log_lines: list[str] = []
-
-    def _log(msg: str) -> None:
-        log_lines.append(msg)
-        log_box.markdown("\n".join(log_lines))
+    # ── Progress bar (lives outside the status box so it stays visible) ───
+    progress_bar = st.progress(0, text="⏳ Starting pipeline...")
 
     with st.status("🔄 Running ThreatWeave Pipeline... (Estimated time: ~400s)", expanded=True) as status:
         # Step 1: Normalize
-        _progress(0)
-        _log("📥 **Normalizing indicators...**")
+        progress_bar.progress(3, text="📥 Normalizing indicators...")
+        st.write("📥 **Normalizing indicators...**")
         normalized = normalize(indicators_data, source="manual")
 
         raw_indicators = [
@@ -275,17 +254,20 @@ def run_pipeline(
             )
             for d in normalized
         ]
-        _log(f"   ✅ {len(raw_indicators)} valid indicators normalised")
+        st.write(f"   ✅ {len(raw_indicators)} valid indicators")
 
         if not raw_indicators:
             progress_bar.empty()
-            status.update(label="❌ No valid indicators found", state="error")
+            status.update(
+                label="❌ No valid indicators found",
+                state="error",
+            )
             return
 
         # Step 2: Enrich
-        _progress(1)
         if skip_enrichment:
-            _log("⏭️ **Skipping enrichment** (disabled by user)")
+            progress_bar.progress(8, text="⏭️ Skipping enrichment...")
+            st.write("⏭️ **Skipping enrichment** (no API keys)")
             enriched = [
                 EnrichedIndicator(
                     indicator=ind,
@@ -295,60 +277,88 @@ def run_pipeline(
                 for ind in raw_indicators
             ]
         else:
-            _log("🔍 **Enriching indicators via NVD / OTX / GeoIP / DNS...**")
+            progress_bar.progress(8, text="🔍 Enriching indicators...")
+            st.write("🔍 **Enriching indicators...**")
             enriched = _run_async(enrich_indicators(raw_indicators))
             ok = sum(1 for e in enriched if e.enrichment_status == "ok")
-            partial = sum(1 for e in enriched if e.enrichment_status == "partial")
-            failed = sum(1 for e in enriched if e.enrichment_status == "failed")
-            _log(f"   ✅ {ok} ok · {partial} partial · {failed} failed")
+            partial = sum(
+                1 for e in enriched if e.enrichment_status == "partial"
+            )
+            failed = sum(
+                1 for e in enriched if e.enrichment_status == "failed"
+            )
+            st.write(f"   ✅ {ok} ok, {partial} partial, {failed} failed")
 
         st.session_state.enriched_indicators = enriched
 
         # Step 3: Build cases
-        _progress(2)
-        _log("📦 **Building investigation cases...**")
+        progress_bar.progress(14, text="📦 Building cases...")
+        st.write("📦 **Building cases...**")
         cases = build_cases(enriched)
-        _log(f"   ✅ {len(cases)} case(s) created")
+        st.write(f"   ✅ {len(cases)} case(s) created")
 
         # Step 4: Run agent pipeline
         for i, case in enumerate(cases):
-            _log(f"\n🤖 **Case {i + 1}/{len(cases)} — entering multi-agent pipeline**")
+            st.write(
+                f"🤖 **Running agents on case {i + 1}/{len(cases)}...**"
+            )
             st.session_state.case = case
 
-            _progress(3)
-            _log("   🧠 Analyst  — performing Hybrid RAG retrieval & ATT&CK mapping...")
+            # Show agent steps immediately (UI feedback)
+            st.write("   🧠 Analyst: Mapping ATT&CK techniques...")
+            st.write("   🎯 Hunter: Generating Sigma rules...")
+            st.write("   🔴 Red Team: Adversarial critique...")
+            st.write("   ✔️ Validator: Quality checks...")
+            st.write("   📝 Reporter: Building final report...")
 
-            _progress(4)
-            _log("   🎯 Hunter   — generating case-specific Sigma detection rules...")
+            # ── Time-based progress animation during the blocking LLM call ─
+            # Crawls from 18% → 92% over 480 seconds in a background thread.
+            # Only reaches 100% when run_analysis actually returns.
+            _stop = threading.Event()
+            _AGENT_DURATION = 480  # seconds budget for agent pipeline
 
-            _progress(5)
-            _log("   ⚔️  Red Team — adversarially critiquing detection coverage...")
+            def _tick(stop_evt=_stop, pb=progress_bar, t0=time.time()):
+                while not stop_evt.is_set():
+                    elapsed = time.time() - t0
+                    # linear ramp 18 → 92 over _AGENT_DURATION seconds
+                    frac = min(elapsed / _AGENT_DURATION, 1.0)
+                    pct = int(18 + 74 * frac)
+                    try:
+                        pb.progress(
+                            pct,
+                            text=f"🤖 Agents running... ({int(elapsed)}s elapsed)"
+                        )
+                    except Exception:
+                        break
+                    stop_evt.wait(timeout=4)  # update every 4 seconds
 
-            _progress(6)
-            _log("   ✅ Validator — running deterministic quality gate...")
-
-            _progress(7)
-            _log("   📄 Reporter — compiling structured intelligence report...")
+            tick_thread = threading.Thread(target=_tick, daemon=True)
+            tick_thread.start()
 
             result = _run_async(run_analysis(case))
+
+            # Stop the ticker and jump to 100%
+            _stop.set()
+            tick_thread.join(timeout=2)
+
             st.session_state.analysis_result = result
 
             report = result.get("report")
             if report:
-                _log(f"   ✅ Report ready: **{report.title}**")
+                st.write(f"   ✅ Report generated: {report.title}")
             else:
                 errors = result.get("errors", [])
                 for err in errors:
-                    _log(f"   ❌ Error: {err}")
+                    st.write(f"   ❌ Error: {err}")
 
         elapsed = time.time() - start_time
         st.session_state.processing_time = elapsed
-        _progress(8)
-        progress_bar.progress(100, text=f"✅ Done — {elapsed:.1f}s")
+        progress_bar.progress(100, text=f"✅ Analysis complete! ({elapsed:.1f}s)")
         status.update(
             label=f"✅ Analysis complete ({elapsed:.1f}s)",
             state="complete",
         )
+
 
 
 # ---------------------------------------------------------------------------
