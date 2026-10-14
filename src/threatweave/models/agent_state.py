@@ -21,7 +21,7 @@ class ThreatAssessment(BaseModel):
 
     severity: Literal["high", "medium", "low"]
     confidence: Literal["high", "medium", "low"]
-    reasoning: str
+    reasoning: str = Field(default="")
 
 
 class TechniqueMapping(BaseModel):
