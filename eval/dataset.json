@@ -199,5 +199,141 @@
       {"type": "ipv4", "value": "45.33.32.156", "context": "Scattered Spider operational infrastructure"}
     ],
     "expected_techniques": ["T1566.002", "T1111", "T1078", "T1199", "T1213"]
+  },
+  {
+    "id": "eval-019",
+    "name": "OilRig - DNS Tunneling Espionage",
+    "source": "MITRE ATT&CK Group G0049 (OilRig/APT34)",
+    "input_iocs": [
+      {"type": "domain", "value": "windows-update-ms.com", "context": "OilRig C2 domain using DNS tunneling for data exfiltration"},
+      {"type": "sha256", "value": "c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0", "context": "HYPERSHELL webshell dropped on compromised Exchange"},
+      {"type": "ipv4", "value": "185.161.211.78", "context": "OilRig DNS C2 server for ALMA Communicator malware"}
+    ],
+    "expected_techniques": ["T1071.004", "T1505.003", "T1041", "T1059.001", "T1027"]
+  },
+  {
+    "id": "eval-020",
+    "name": "APT41 - Log4Shell Exploitation",
+    "source": "MITRE ATT&CK Group G0096 (APT41)",
+    "input_iocs": [
+      {"type": "cve", "value": "CVE-2021-44228", "context": "Log4Shell RCE vulnerability in Apache Log4j exploited by APT41"},
+      {"type": "ipv4", "value": "45.83.192.89", "context": "APT41 payload delivery server for Log4j exploitation"},
+      {"type": "domain", "value": "log4j-exploit.com", "context": "APT41 domain hosting malicious JNDI callback server"},
+      {"type": "sha256", "value": "d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1", "context": "Cobalt Strike beacon dropped post-exploitation"}
+    ],
+    "expected_techniques": ["T1190", "T1059.001", "T1071.001", "T1003.001", "T1560"]
+  },
+  {
+    "id": "eval-021",
+    "name": "Lazarus Group - 3CX Supply Chain",
+    "source": "MITRE ATT&CK Group G0032 (Lazarus Group)",
+    "input_iocs": [
+      {"type": "domain", "value": "3cx-update.com", "context": "Lazarus C2 domain used in 3CX VoIP supply chain attack"},
+      {"type": "sha256", "value": "e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2", "context": "Trojanized 3CXDesktopApp.exe installer"},
+      {"type": "ipv4", "value": "194.165.16.76", "context": "Lazarus Group second-stage payload server"}
+    ],
+    "expected_techniques": ["T1195.002", "T1036.005", "T1071.001", "T1055.001", "T1057"]
+  },
+  {
+    "id": "eval-022",
+    "name": "Carbanak - Banking Lateral Movement",
+    "source": "MITRE ATT&CK Group G0008 (Carbanak)",
+    "input_iocs": [
+      {"type": "sha256", "value": "f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3", "context": "Carbanak RAT used for persistent access in bank network"},
+      {"type": "ipv4", "value": "91.219.28.53", "context": "Carbanak C2 server for financial institution targeting"},
+      {"type": "domain", "value": "sberbank-update.com", "context": "Carbanak phishing domain mimicking Russian bank"}
+    ],
+    "expected_techniques": ["T1566.001", "T1021.001", "T1071.001", "T1074.001", "T1113"]
+  },
+  {
+    "id": "eval-023",
+    "name": "APT28 - Olympic Destroyer Attribution",
+    "source": "MITRE ATT&CK Group G0007 (APT28/Fancy Bear)",
+    "input_iocs": [
+      {"type": "sha256", "value": "a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4", "context": "Olympic Destroyer wiper targeting 2018 Winter Olympics infrastructure"},
+      {"type": "ipv4", "value": "217.12.205.94", "context": "APT28 infrastructure used in false-flag operation"},
+      {"type": "domain", "value": "olympic-update.com", "context": "Domain used to deliver Olympic Destroyer payload"}
+    ],
+    "expected_techniques": ["T1485", "T1070.004", "T1036", "T1059.003", "T1027"]
+  },
+  {
+    "id": "eval-024",
+    "name": "Kimsuky - Operation AppleSeed",
+    "source": "MITRE ATT&CK Group G0094 (Kimsuky)",
+    "input_iocs": [
+      {"type": "domain", "value": "hanmail-verify.com", "context": "Kimsuky spearphishing domain targeting South Korean government officials"},
+      {"type": "sha256", "value": "b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5", "context": "AppleSeed backdoor used for espionage against Korean targets"},
+      {"type": "ipv4", "value": "5.62.56.160", "context": "Kimsuky C2 server for AppleSeed campaign"},
+      {"type": "cve", "value": "CVE-2022-30190", "context": "Follina MSDT vulnerability exploited in initial access document"}
+    ],
+    "expected_techniques": ["T1566.001", "T1203", "T1059.005", "T1071.001", "T1113"]
+  },
+  {
+    "id": "eval-025",
+    "name": "MuddyWater - C2 via Ligolo",
+    "source": "MITRE ATT&CK Group G0069 (MuddyWater)",
+    "input_iocs": [
+      {"type": "domain", "value": "office365-login.me", "context": "MuddyWater credential phishing domain targeting telecom sector"},
+      {"type": "sha256", "value": "c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6", "context": "SimpleHell Python RAT deployed by MuddyWater"},
+      {"type": "ipv4", "value": "136.243.75.171", "context": "MuddyWater C2 tunneling infrastructure"}
+    ],
+    "expected_techniques": ["T1566.002", "T1059.006", "T1090.003", "T1071.001", "T1119"]
+  },
+  {
+    "id": "eval-026",
+    "name": "Volt Typhoon - Living Off the Land",
+    "source": "MITRE ATT&CK Group G1017 (Volt Typhoon)",
+    "input_iocs": [
+      {"type": "ipv4", "value": "192.0.2.56", "context": "Volt Typhoon SOHO router compromised as relay node"},
+      {"type": "domain", "value": "fortinet-support.com", "context": "Domain used in Volt Typhoon VPN credential phishing"},
+      {"type": "cve", "value": "CVE-2022-40684", "context": "Fortinet FortiOS authentication bypass exploited for initial access"}
+    ],
+    "expected_techniques": ["T1190", "T1078", "T1090.002", "T1036.005", "T1082"]
+  },
+  {
+    "id": "eval-027",
+    "name": "Turla - LightNeuron Email Backdoor",
+    "source": "MITRE ATT&CK Group G0010 (Turla)",
+    "input_iocs": [
+      {"type": "sha256", "value": "d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7", "context": "LightNeuron Exchange mail agent backdoor"},
+      {"type": "domain", "value": "pdf-secure.com", "context": "Turla PDF-based C2 communication domain"},
+      {"type": "ipv4", "value": "194.187.249.60", "context": "Turla C2 server receiving exfiltrated email data"}
+    ],
+    "expected_techniques": ["T1505.002", "T1114.002", "T1071.003", "T1027", "T1041"]
+  },
+  {
+    "id": "eval-028",
+    "name": "APT41 - Citrix & Cisco Exploitation",
+    "source": "MITRE ATT&CK Group G0096 (APT41)",
+    "input_iocs": [
+      {"type": "cve", "value": "CVE-2019-19781", "context": "Citrix ADC arbitrary code execution exploited by APT41"},
+      {"type": "cve", "value": "CVE-2019-15271", "context": "Cisco RV router code execution vulnerability"},
+      {"type": "ipv4", "value": "134.209.82.186", "context": "APT41 post-exploitation C2 following network device compromise"},
+      {"type": "sha256", "value": "e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8", "context": "BEACON implant deployed after initial access"}
+    ],
+    "expected_techniques": ["T1190", "T1133", "T1059.001", "T1071.001", "T1005"]
+  },
+  {
+    "id": "eval-029",
+    "name": "Sandworm - AcidRain Satellite Wiper",
+    "source": "MITRE ATT&CK Group G0034 (Sandworm Team)",
+    "input_iocs": [
+      {"type": "sha256", "value": "f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9", "context": "AcidRain wiper targeting Viasat KA-SAT modems"},
+      {"type": "ipv4", "value": "217.246.188.186", "context": "Sandworm infrastructure used in Viasat attack"},
+      {"type": "cve", "value": "CVE-2022-29303", "context": "SolarView Solar Power monitoring RCE exploited as distraction"}
+    ],
+    "expected_techniques": ["T1561.002", "T1485", "T1498", "T1059.004", "T1070"]
+  },
+  {
+    "id": "eval-030",
+    "name": "Scattered Spider - Ransomware as a Service",
+    "source": "MITRE ATT&CK Group G1015 (Scattered Spider)",
+    "input_iocs": [
+      {"type": "domain", "value": "mgm-helpdesk.com", "context": "Scattered Spider social engineering domain in MGM Resorts attack"},
+      {"type": "sha256", "value": "a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0", "context": "BlackCat/ALPHV ransomware binary deployed by Scattered Spider"},
+      {"type": "ipv4", "value": "104.21.93.220", "context": "Scattered Spider C2 infrastructure node"},
+      {"type": "domain", "value": "caesars-it-support.com", "context": "IT helpdesk impersonation domain used for vishing"}
+    ],
+    "expected_techniques": ["T1566.004", "T1078", "T1486", "T1490", "T1657"]
   }
 ]
