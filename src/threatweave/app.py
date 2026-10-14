@@ -143,6 +143,32 @@ st.markdown(
         color: #a5b4fc;
         font-size: 0.8rem;
     }
+    /* --- Live engine indicator --- */
+    .engine-status {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        justify-content: center;
+        margin: 1.2rem 0 0.5rem 0;
+        font-size: 0.9rem;
+        color: #94a3b8;
+    }
+    .pulse-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #22c55e;
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+        animation: pulse-green 1.4s ease-in-out infinite;
+        flex-shrink: 0;
+    }
+    @keyframes pulse-green {
+        0%   { box-shadow: 0 0 0 0   rgba(34, 197, 94, 0.7); }
+        70%  { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);   }
+        100% { box-shadow: 0 0 0 0   rgba(34, 197, 94, 0);    }
+    }
+    /* scroll anchor trick */
+    #pipeline-anchor { display: block; height: 1px; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -207,9 +233,36 @@ def run_pipeline(
 
     start_time = time.time()
 
+    # ── Progress bar + step label ─────────────────────────────────────────
+    progress_bar = st.progress(0, text="Starting pipeline...")
+
+    STEPS = [
+        (5,  "📥 Normalizing indicators..."),
+        (15, "🔍 Enriching with OSINT APIs..."),
+        (25, "📦 Building investigation cases..."),
+        (40, "🧠 Analyst — mapping ATT&CK techniques via Hybrid RAG..."),
+        (58, "🎯 Hunter — generating Sigma detection rules..."),
+        (72, "⚔️ Red Team — adversarial critique of detections..."),
+        (85, "✅ Validator — deterministic quality checks..."),
+        (95, "📄 Reporter — compiling final intelligence report..."),
+        (100, "✅ Analysis complete!"),
+    ]
+
+    def _progress(step_idx: int) -> None:
+        pct, label = STEPS[step_idx]
+        progress_bar.progress(pct, text=label)
+
+    log_box = st.empty()   # live log lines
+    log_lines: list[str] = []
+
+    def _log(msg: str) -> None:
+        log_lines.append(msg)
+        log_box.markdown("\n".join(log_lines))
+
     with st.status("🔄 Running ThreatWeave Pipeline... (Estimated time: ~400s)", expanded=True) as status:
         # Step 1: Normalize
-        st.write("📥 **Normalizing indicators...**")
+        _progress(0)
+        _log("📥 **Normalizing indicators...**")
         normalized = normalize(indicators_data, source="manual")
 
         raw_indicators = [
@@ -222,18 +275,17 @@ def run_pipeline(
             )
             for d in normalized
         ]
-        st.write(f"   ✅ {len(raw_indicators)} valid indicators")
+        _log(f"   ✅ {len(raw_indicators)} valid indicators normalised")
 
         if not raw_indicators:
-            status.update(
-                label="❌ No valid indicators found",
-                state="error",
-            )
+            progress_bar.empty()
+            status.update(label="❌ No valid indicators found", state="error")
             return
 
         # Step 2: Enrich
+        _progress(1)
         if skip_enrichment:
-            st.write("⏭️ **Skipping enrichment** (no API keys)")
+            _log("⏭️ **Skipping enrichment** (disabled by user)")
             enriched = [
                 EnrichedIndicator(
                     indicator=ind,
@@ -243,51 +295,56 @@ def run_pipeline(
                 for ind in raw_indicators
             ]
         else:
-            st.write("🔍 **Enriching indicators...**")
+            _log("🔍 **Enriching indicators via NVD / OTX / GeoIP / DNS...**")
             enriched = _run_async(enrich_indicators(raw_indicators))
             ok = sum(1 for e in enriched if e.enrichment_status == "ok")
-            partial = sum(
-                1 for e in enriched if e.enrichment_status == "partial"
-            )
-            failed = sum(
-                1 for e in enriched if e.enrichment_status == "failed"
-            )
-            st.write(f"   ✅ {ok} ok, {partial} partial, {failed} failed")
+            partial = sum(1 for e in enriched if e.enrichment_status == "partial")
+            failed = sum(1 for e in enriched if e.enrichment_status == "failed")
+            _log(f"   ✅ {ok} ok · {partial} partial · {failed} failed")
 
         st.session_state.enriched_indicators = enriched
 
         # Step 3: Build cases
-        st.write("📦 **Building cases...**")
+        _progress(2)
+        _log("📦 **Building investigation cases...**")
         cases = build_cases(enriched)
-        st.write(f"   ✅ {len(cases)} case(s) created")
+        _log(f"   ✅ {len(cases)} case(s) created")
 
         # Step 4: Run agent pipeline
         for i, case in enumerate(cases):
-            st.write(
-                f"🤖 **Running agents on case {i + 1}/{len(cases)}...**"
-            )
+            _log(f"\n🤖 **Case {i + 1}/{len(cases)} — entering multi-agent pipeline**")
             st.session_state.case = case
 
-            # Agent progress
-            st.write("   🧠 Analyst: Mapping ATT&CK techniques...")
-            st.write("   🎯 Hunter: Generating Sigma rules...")
-            st.write("   🔴 Red Team: Adversarial critique...")
-            st.write("   ✔️ Validator: Quality checks...")
-            st.write("   📝 Reporter: Building final report...")
+            _progress(3)
+            _log("   🧠 Analyst  — performing Hybrid RAG retrieval & ATT&CK mapping...")
+
+            _progress(4)
+            _log("   🎯 Hunter   — generating case-specific Sigma detection rules...")
+
+            _progress(5)
+            _log("   ⚔️  Red Team — adversarially critiquing detection coverage...")
+
+            _progress(6)
+            _log("   ✅ Validator — running deterministic quality gate...")
+
+            _progress(7)
+            _log("   📄 Reporter — compiling structured intelligence report...")
 
             result = _run_async(run_analysis(case))
             st.session_state.analysis_result = result
 
             report = result.get("report")
             if report:
-                st.write(f"   ✅ Report generated: {report.title}")
+                _log(f"   ✅ Report ready: **{report.title}**")
             else:
                 errors = result.get("errors", [])
                 for err in errors:
-                    st.write(f"   ❌ Error: {err}")
+                    _log(f"   ❌ Error: {err}")
 
         elapsed = time.time() - start_time
         st.session_state.processing_time = elapsed
+        _progress(8)
+        progress_bar.progress(100, text=f"✅ Done — {elapsed:.1f}s")
         status.update(
             label=f"✅ Analysis complete ({elapsed:.1f}s)",
             state="complete",
@@ -429,6 +486,20 @@ if st.session_state.page == "input":
     )
 
 elif st.session_state.page == "processing":
+    # ── Auto-scroll anchor injected immediately ───────────────────────────
+    st.markdown('<span id="pipeline-anchor"></span>', unsafe_allow_html=True)
+    st.markdown(
+        """
+        <script>
+            window.setTimeout(function() {
+                var el = window.parent.document.getElementById('pipeline-anchor');
+                if (el) { el.scrollIntoView({behavior: 'smooth', block: 'start'}); }
+            }, 200);
+        </script>
+        """,
+        unsafe_allow_html=True,
+    )
+
     # ── Build IOC preview text ────────────────────────────────────────────
     raw_iocs = st.session_state.get("indicators_data_to_run", [])
     ioc_lines = []
@@ -457,7 +528,11 @@ elif st.session_state.page == "processing":
                 <span class="agent-pill">&#x25B6; &#x25B6;</span>
                 <span class="agent-pill">&#x1F4C4; Reporter</span>
             </div>
-            <div class="timer-box">&#x23F1; Estimated completion time &nbsp;~&nbsp;<b>400 seconds</b> &nbsp;|&nbsp; Groq API + ATT&amp;CK RAG retrieval</div>
+            <div class="engine-status">
+                <div class="pulse-dot"></div>
+                <span>Engine active &nbsp;&mdash;&nbsp; NVIDIA Nemotron 30B &nbsp;&bull;&nbsp; Hybrid RAG &nbsp;&bull;&nbsp; ATT&amp;CK v15</span>
+            </div>
+            <div class="timer-box">&#x23F1; Estimated completion time &nbsp;~&nbsp;<b>400 seconds</b></div>
         </div>
         """,
         unsafe_allow_html=True,
