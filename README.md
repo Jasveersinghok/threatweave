@@ -19,12 +19,12 @@ Evaluated on 10 labeled threat cases from real-world APT groups (MITRE ATT&CK Gr
 
 | Metric | Score | Notes |
 |---|---|---|
-| **Strict Precision** | **80%** | % of predicted ATT&CK IDs that are correct |
-| **Strict Recall** | **50%** | % of actual techniques successfully found |
-| **Strict F1** | **55%** | Harmonic mean of precision & recall |
+| **Strict Precision** | **83%** | % of predicted ATT&CK IDs that are correct |
+| **Strict Recall** | **51%** | % of actual techniques successfully found |
+| **Strict F1** | **56%** | Harmonic mean of precision & recall |
 | **Tactic Precision** | **100%** | % of predicted tactics that are correct |
 | **Tactic Recall** | **56%** | % of actual tactics identified |
-| **Retrieval Recall@25** | **60%** | Correct techniques retrieved in top-25 candidates |
+| **Retrieval Recall@25** | **63%** | Correct techniques retrieved in top-25 candidates |
 | **Sigma Validity** | **100%** | % of Sigma rules that parse with pySigma |
 | **Hallucination Rate** | **0%** | No fabricated ATT&CK IDs passed the Validator |
 
