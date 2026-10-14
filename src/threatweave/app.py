@@ -496,18 +496,15 @@ if st.session_state.page == "input":
     )
 
 elif st.session_state.page == "processing":
-    # ── Auto-scroll anchor injected immediately ───────────────────────────
-    st.markdown('<span id="pipeline-anchor"></span>', unsafe_allow_html=True)
-    st.markdown(
+    # ── Scroll to top of page immediately when processing starts ──────────
+    import streamlit.components.v1 as components
+    components.html(
         """
         <script>
-            window.setTimeout(function() {
-                var el = window.parent.document.getElementById('pipeline-anchor');
-                if (el) { el.scrollIntoView({behavior: 'smooth', block: 'start'}); }
-            }, 200);
+            window.parent.scrollTo({top: 0, behavior: 'smooth'});
         </script>
         """,
-        unsafe_allow_html=True,
+        height=0,
     )
 
     # ── Build IOC preview text ────────────────────────────────────────────
